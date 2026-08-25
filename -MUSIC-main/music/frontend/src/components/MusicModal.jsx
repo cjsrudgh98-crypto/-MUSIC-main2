@@ -46,16 +46,12 @@ export default function MusicModal({ isOpen, onClose, onSubmit, initialData }) {
     setValidationMessage('');
 
     if (initialData) {
-      // 카멜 케이스(thumbnailUrl)와 스네이크 케이스(thumbnail_url) 모두 대응
-      const thumbnail = initialData.thumbnailUrl || initialData.thumbnail_url || '';
-      const videoId = initialData.youtubeVideoId || initialData.youtube_video_id || '';
-
       setFormData({
         title: initialData.title || '',
         artist: initialData.artist || '',
-        thumbnailUrl: thumbnail,
+        thumbnailUrl: initialData.thumbnailUrl || '',
       });
-      setYoutubeInput(videoId);
+      setYoutubeInput(initialData.youtubeVideoId || '');
     } else {
       setFormData({ title: '', artist: '', thumbnailUrl: '' });
       setYoutubeInput('');
@@ -68,13 +64,7 @@ export default function MusicModal({ isOpen, onClose, onSubmit, initialData }) {
     e.preventDefault();
 
     if (initialData) {
-      // 백엔드 DTO 규격(카멜/스네이크)에 맞춰 둘 다 실어서 전송
-      onSubmit({
-        ...formData,
-        thumbnail_url: formData.thumbnailUrl,
-        youtubeVideoId: youtubeInput,
-        youtube_video_id: youtubeInput
-      });
+      onSubmit(formData);
       return;
     }
 

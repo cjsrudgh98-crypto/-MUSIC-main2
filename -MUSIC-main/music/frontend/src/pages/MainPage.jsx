@@ -6,8 +6,10 @@ import MusicModal from '../components/MusicModal';
 import { musicApi } from '../api/musicApi';
 import { usePlayer } from '../context/PlayerContext';
 
-export default function MainPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+export default function MainPage({ isModalOpen, setIsModalOpen }) {
   const [musics, setMusics] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [editingMusic, setEditingMusic] = useState(null);
