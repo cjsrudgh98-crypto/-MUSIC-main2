@@ -17,15 +17,15 @@
 
 <br />
 
-<a href="https://github.com/cjsrudgh98-crypto/-MUSIC-main2/raw/main/docs/portfolio/StreamWave-portfolio.pdf"><img src="https://img.shields.io/badge/📄_포트폴리오_PDF-다운로드-e0207f?style=for-the-badge" alt="포트폴리오 PDF 다운로드" /></a>
-<a href="docs/demo/StreamWave-demo.mp4"><img src="https://img.shields.io/badge/▶_시연_영상-2분_29초-111827?style=for-the-badge" alt="시연 영상 보기" /></a>
+<a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/portfolio/StreamWave-portfolio.pdf"><img src="https://img.shields.io/badge/📄_포트폴리오_PDF-바로_보기-e0207f?style=for-the-badge" alt="포트폴리오 PDF 보기" /></a>
+<a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/demo/StreamWave-demo.mp4"><img src="https://img.shields.io/badge/▶_시연_영상-2분_29초-111827?style=for-the-badge" alt="시연 영상 보기" /></a>
 
 </div>
 
 <p align="center">
   <img src="docs/demo/StreamWave-demo.gif" width="860" alt="StreamWave 시연 - 검색·재생, 관련 상품, 주문·토스 결제창, TOP 100, 라이브 방송·투표·채팅, 음표, 플레이리스트, 이용권 등급, 관리자 스토어 관리, 모바일 전용 화면" />
   <br />
-  <sub>▲ 실제 서비스 화면 시연 (2배속) · 원본 영상: <a href="docs/demo/StreamWave-demo.mp4">StreamWave-demo.mp4</a></sub>
+  <sub>▲ 실제 서비스 화면 시연 (2배속) · 원본 영상: <a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/demo/StreamWave-demo.mp4">StreamWave-demo.mp4</a></sub>
 </p>
 
 ---
@@ -50,8 +50,8 @@
 
 | | |
 |---|---|
-| ▶ **시연 영상** | [StreamWave-demo.mp4](docs/demo/StreamWave-demo.mp4) (2분 29초, 1280×720). 자막으로 단계를 안내하므로 소리 없이 볼 수 있습니다. |
-| 📄 **포트폴리오 PDF** | [StreamWave-portfolio.pdf](https://github.com/cjsrudgh98-crypto/-MUSIC-main2/raw/main/docs/portfolio/StreamWave-portfolio.pdf) (A4 8쪽): 개요 · 화면 · 시스템 구조 · 기술적 도전과 해결 8가지 · 테스트 |
+| ▶ **시연 영상** | [StreamWave-demo.mp4](https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/demo/StreamWave-demo.mp4) (2분 29초, 1280×720). 자막으로 단계를 안내하므로 소리 없이 볼 수 있습니다. |
+| 📄 **포트폴리오 PDF** | [StreamWave-portfolio.pdf](https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/portfolio/StreamWave-portfolio.pdf) (A4 8쪽): 개요 · 화면 · 시스템 구조 · 기술적 도전과 해결 8가지 · 테스트 |
 
 **영상 순서**
 
