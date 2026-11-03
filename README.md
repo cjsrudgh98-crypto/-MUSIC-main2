@@ -17,6 +17,7 @@
 
 <br />
 
+<a href="https://streamwavekr.duckdns.org"><img src="https://img.shields.io/badge/🌐_배포_사이트-streamwavekr.duckdns.org-1F88C0?style=for-the-badge" alt="배포 사이트 바로가기" /></a>
 <a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/portfolio/StreamWave-portfolio.pdf"><img src="https://img.shields.io/badge/📄_포트폴리오_PDF-바로_보기-e0207f?style=for-the-badge" alt="포트폴리오 PDF 보기" /></a>
 <a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/demo/StreamWave-demo.mp4"><img src="https://img.shields.io/badge/▶_시연_영상-2분_29초-111827?style=for-the-badge" alt="시연 영상 보기" /></a>
 
@@ -32,6 +33,7 @@
 
 ## 목차
 
+- [배포 사이트 · 관리자 계정](#-배포-사이트--관리자-계정)
 - [시연 영상 · 포트폴리오](#-시연-영상--포트폴리오)
 - [프로젝트 소개](#-프로젝트-소개)
 - [주요 기능](#-주요-기능)
@@ -43,6 +45,22 @@
 - [실행 방법](#-실행-방법)
 - [프로젝트 구조](#-프로젝트-구조)
 - [개발자](#-개발자)
+
+---
+
+## 🌐 배포 사이트 · 관리자 계정
+
+| | |
+|---|---|
+| 🌐 **배포 주소** | **https://streamwavekr.duckdns.org** |
+| 🔑 **관리자 아이디** | `admin@streamwave.kr` |
+| 🔑 **관리자 비밀번호** | `SwAdmin08030e!` |
+| 👤 **권한** | 최고 관리자 (ROLE_ADMIN): 이용권 없이 모든 기능 사용 가능 |
+
+- 로그인 화면에서 **이메일 로그인**으로 들어갑니다. 소셜 로그인 버튼은 쓰지 않습니다.
+- 로그인하면 관리자 기능이 열립니다: 우측 상단 **프로필 패널**의 스토어 관리(상품 · 곡 연결 · 주문 상태)와 권한 관리(부 관리자 지정), 메인 화면의 YouTube 주소로 곡 직접 등록, 사이드바의 카탈로그 정리.
+- 함께 쓰는 체험 계정입니다. 곡 삭제나 주문 취소처럼 되돌릴 수 없는 작업은 피해 주세요.
+- 일반 회원 화면을 보려면 회원가입으로 새 계정을 만들면 됩니다.
 
 ---
 
@@ -475,6 +493,21 @@ cd ./-MUSIC-main/-MUSIC-main/music
 cp .env.example .env   # 값 채우기 (아래 표)
 docker compose -f docker-compose.prod.yml up -d --build
 ```
+
+- 서비스 주소: **https://streamwavekr.duckdns.org** (DuckDNS 도메인, Caddy가 HTTPS 인증서를 자동으로 발급)
+- MySQL · Redis · SRS · 백엔드 · 프론트엔드 · Caddy가 한 Compose 스택으로 돌아갑니다. MySQL은 외부 포트를 열지 않고 백엔드만 도커 네트워크로 접근합니다.
+
+**관리자 계정 만들기**: 회원가입으로는 일반 회원(ROLE_USER)만 만들어집니다. 첫 관리자는 DB에 직접 넣습니다. 비밀번호는 Spring `BCryptPasswordEncoder`로 암호화한 값이어야 합니다. 아래 값은 위의 체험용 관리자 계정입니다.
+
+```bash
+docker exec -i music-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 music_db' <<'SQL'
+INSERT INTO users (created_at, updated_at, provider, role, nickname, email, password)
+VALUES (NOW(6), NOW(6), 'local', 'ROLE_ADMIN', '관리자', 'admin@streamwave.kr',
+        '$2a$10$XIti9yD38cMrga4rJ1Lr9.ZGuOdrQ004lgKQkNkKZE8uDn1e956W2');
+SQL
+```
+
+관리자가 하나 생기면 다음 관리자부터는 **프로필 패널 → 권한 관리** 탭에서 권한을 줄 수 있습니다(최고 관리자만 가능).
 
 | 변수 | 용도 |
 |---|---|
