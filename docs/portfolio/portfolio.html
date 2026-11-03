@@ -123,7 +123,8 @@
       <dt>구분</dt><dd>개인 프로젝트 · 풀스택 (기획 · 백엔드 · 프론트엔드 · 배포)</dd>
       <dt>Backend</dt><dd>Java 25 · Spring Boot 4.1 · Spring Security · JPA · WebSocket(STOMP)</dd>
       <dt>Frontend</dt><dd>React 18 · Vite 5 · hls.js · YouTube IFrame API</dd>
-      <dt>Infra</dt><dd>MySQL · Redis · SRS(RTMP/HLS) · Docker Compose · Caddy</dd>
+      <dt>Infra</dt><dd>AWS EC2 · Docker Compose · Caddy · MySQL · Redis · SRS(RTMP/HLS)</dd>
+      <dt>배포</dt><dd>15-165-125-223.sslip.io</dd>
       <dt>GitHub</dt><dd>github.com/cjsrudgh98-crypto/-MUSIC-main2</dd>
     </dl>
   </div>
@@ -258,7 +259,7 @@
 <!-- 5. 아키텍처 -->
 <section class="page">
   <h2 class="sec"><small>ARCHITECTURE</small>시스템 구조</h2>
-  <p class="lead">Docker Compose 로 MySQL · Redis · SRS · Spring · Caddy 를 띄웁니다. Caddy 가 HTTPS 를 맡고 <code>/api</code>·<code>/ws</code> 는 Spring 으로, HLS 파일만 SRS 로 보냅니다.</p>
+  <p class="lead">AWS EC2 한 대에서 Docker Compose 로 MySQL · Redis · SRS · Spring · Caddy 를 띄웁니다. Caddy 가 HTTPS 를 맡고 <code>/api</code>·<code>/ws</code> 는 Spring 으로, HLS 파일만 SRS 로 보냅니다.</p>
   <div class="arch">
     <div class="tier client">
       <h4>Client</h4>
@@ -270,7 +271,7 @@
     <div class="tier server">
       <h4>Spring Boot 4.1 (Docker)</h4>
       <div class="node"><b>Security</b>Bearer 토큰(Redis) + 세션 · OAuth2 (Kakao/Naver/Google) · Rate Limit · 오류 ID 응답</div>
-      <div class="node"><b>Controller</b>음악 · 차트 · 라이브 · 채팅(STOMP) · 음표 · 스토어 · 결제 · 플레이리스트 · 관리자 — REST 78 + STOMP 3</div>
+      <div class="node"><b>Controller</b>음악 · 차트 · 라이브 · 채팅(STOMP) · 음표 · 스토어 · 결제 · 플레이리스트 · 관리자 — REST 80 + STOMP 3</div>
       <div class="node"><b>Service</b>YouTubeApi(다중 키) · Chart(24h 버킷) · SongVote · ChatModeration · Donation · Shop · Payment · Notification</div>
       <div class="node"><b>Data</b>MySQL (JPA 엔티티 14) · Redis (토큰 · 차트 · 투표 · 시청자 수 · 알림 · 채팅 금지)</div>
       <div class="node"><b>Scheduler</b>YouTube 동기화 · 이용권 만료 알림 · 결제 대기 정리 · 스냅샷</div>
@@ -293,7 +294,7 @@
     <tr><th>Data</th><td>MySQL 8, Redis</td></tr>
     <tr><th>Live</th><td>SRS 6 (RTMP → HLS, HTTP 훅), ffmpeg 썸네일 캡처, OBS</td></tr>
     <tr><th>Test</th><td>JUnit 5, Spring Boot Test, Mockito (<code>@MockitoBean</code>)</td></tr>
-    <tr><th>Infra</th><td>Docker Compose (MySQL · Redis · SRS · Spring · Caddy), Caddy 자동 HTTPS</td></tr>
+    <tr><th>Infra</th><td>AWS EC2 (탄력적 IP), Docker Compose (MySQL · Redis · SRS · Spring · Caddy), Caddy 자동 HTTPS</td></tr>
   </table>
   <div class="foot"><span>StreamWave · 포트폴리오</span><span>5</span></div>
 </section>
@@ -411,9 +412,10 @@
   <div class="qr" style="margin-top:9mm">
     <div style="font-size:24pt">🔗</div>
     <div>
-      <b>저장소 · 시연 영상</b>
+      <b>배포 사이트 · 저장소 · 시연 영상</b>
+      <p><code>https://15-165-125-223.sslip.io</code> (관리자 체험 계정은 README 참고)</p>
       <p><code>github.com/cjsrudgh98-crypto/-MUSIC-main2</code></p>
-      <p style="color:var(--ink-2)">README 에 실행 방법(로컬 / Docker Compose), 화면, 시연 영상이 있습니다.</p>
+      <p style="color:var(--ink-2)">README 에 실행 방법(로컬 / AWS EC2 + Docker Compose), 화면, 시연 영상이 있습니다.</p>
     </div>
   </div>
   <div class="foot"><span>StreamWave · 포트폴리오</span><span>8</span></div>

@@ -14,10 +14,11 @@
 ![SRS](https://img.shields.io/badge/SRS-RTMP%20%2F%20HLS-E02D2D)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![Caddy](https://img.shields.io/badge/Caddy-1F88C0?logo=caddy&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS-EC2-FF9900?logo=amazonwebservices&logoColor=white)
 
 <br />
 
-<a href="https://streamwavekr.duckdns.org"><img src="https://img.shields.io/badge/🌐_배포_사이트-streamwavekr.duckdns.org-1F88C0?style=for-the-badge" alt="배포 사이트 바로가기" /></a>
+<a href="https://15-165-125-223.sslip.io"><img src="https://img.shields.io/badge/🌐_배포_사이트-15--165--125--223.sslip.io-1F88C0?style=for-the-badge" alt="배포 사이트 바로가기" /></a>
 <a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/portfolio/StreamWave-portfolio.pdf"><img src="https://img.shields.io/badge/📄_포트폴리오_PDF-바로_보기-e0207f?style=for-the-badge" alt="포트폴리오 PDF 보기" /></a>
 <a href="https://cdn.jsdelivr.net/gh/cjsrudgh98-crypto/-MUSIC-main2@main/docs/demo/StreamWave-demo.mp4"><img src="https://img.shields.io/badge/▶_시연_영상-2분_29초-111827?style=for-the-badge" alt="시연 영상 보기" /></a>
 
@@ -52,7 +53,7 @@
 
 | | |
 |---|---|
-| 🌐 **배포 주소** | **https://streamwavekr.duckdns.org** |
+| 🌐 **배포 주소** | **https://15-165-125-223.sslip.io** (AWS EC2 · 서울 리전) |
 | 🔑 **관리자 아이디** | `admin@streamwave.kr` |
 | 🔑 **관리자 비밀번호** | `SwAdmin08030e!` |
 | 👤 **권한** | 최고 관리자 (ROLE_ADMIN): 이용권 없이 모든 기능 사용 가능 |
@@ -247,7 +248,7 @@ npm run pdf                       # docs/portfolio/StreamWave-portfolio.pdf
 | **외부 연동** | YouTube Data API v3 (다중 키 로테이션), 토스페이먼츠 결제위젯·승인·취소, AWS S3 + CloudFront, Gmail SMTP |
 | **Frontend** | React 18, Vite 5, React Router 6, Axios, @stomp/stompjs + SockJS, hls.js, react-youtube |
 | **Test** | JUnit 5, Spring Boot Test, Mockito (`@MockitoBean`) |
-| **Infra** | Docker Compose (MySQL · Redis · SRS · Spring · Caddy), Caddy 자동 HTTPS 리버스 프록시 |
+| **Infra** | AWS EC2 (탄력적 IP), Docker Compose (MySQL · Redis · SRS · Spring · Caddy), Caddy 자동 HTTPS 리버스 프록시 |
 
 ---
 
@@ -260,7 +261,7 @@ flowchart LR
         OBS[OBS Studio]
     end
 
-    subgraph Server["Docker Compose"]
+    subgraph Server["AWS EC2 · Docker Compose"]
         CADDY[Caddy<br/>HTTPS · 정적 파일 · 프록시]
         API[Spring Boot<br/>REST · STOMP · OAuth2]
         SRS[SRS<br/>RTMP → HLS]
@@ -474,7 +475,7 @@ cd ./-MUSIC-main/-MUSIC-main/music/frontend && npm install && npm run dev
 
 | 항목 | 값 |
 |---|---|
-| 서버 | `rtmp://localhost/live` |
+| 서버 | 로컬 `rtmp://localhost/live` · 운영 `rtmp://{APP_HOST}/live` (스튜디오 화면에 그대로 표시됨) |
 | 스트림 키 | 프로필 → **스튜디오**에서 발급한 키 그대로 (`pb_…?key=live_…` 형식) |
 | 채팅 오버레이 | 스튜디오에 표시되는 URL을 OBS **브라우저 소스**로 추가 |
 
@@ -486,21 +487,32 @@ cd ./-MUSIC-main/-MUSIC-main/music/frontend && npm install && npm run dev
 | 8080 | Spring Boot |
 | 3000 | Vite 개발 서버 |
 
-### 3. 운영 배포 (Docker Compose)
+### 3. 운영 배포 (AWS EC2 + Docker Compose)
+
+현재 배포 환경입니다.
+
+| 항목 | 값 |
+|---|---|
+| 서버 | AWS EC2 `t3.small` (서울), Ubuntu 24.04, 디스크 30GB, 스왑 4GB |
+| 주소 | 탄력적 IP `15.165.125.223` → **https://15-165-125-223.sslip.io** (도메인 구매 없이 IP로 접속되는 sslip.io 사용) |
+| 보안 그룹 | 80 · 443 (사이트), 1935 (OBS 송출), 22 (관리자 IP · EC2 Instance Connect만) |
 
 ```bash
-cd ./-MUSIC-main/-MUSIC-main/music
+# 서버에서 (Docker 설치 후)
+git clone https://github.com/cjsrudgh98-crypto/-MUSIC-main2.git && cd -- -MUSIC-main2/-MUSIC-main/-MUSIC-main/music
 cp .env.example .env   # 값 채우기 (아래 표)
-docker compose -f docker-compose.prod.yml up -d --build
+sudo docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-- 서비스 주소: **https://streamwavekr.duckdns.org** (DuckDNS 도메인, Caddy가 HTTPS 인증서를 자동으로 발급)
-- MySQL · Redis · SRS · 백엔드 · 프론트엔드 · Caddy가 한 Compose 스택으로 돌아갑니다. MySQL은 외부 포트를 열지 않고 백엔드만 도커 네트워크로 접근합니다.
+- MySQL · Redis · SRS · 백엔드 · 프론트엔드 · Caddy가 한 Compose 스택으로 돌아갑니다. MySQL · Redis · SRS API는 외부 포트를 열지 않고 도커 네트워크 안에서만 접근합니다.
+- **주소는 `.env`의 `APP_HOST` 하나로 관리합니다.** Caddy의 HTTPS 인증서, CORS, 소셜 로그인 리다이렉트, HLS 주소, 스튜디오에 표시되는 OBS 송출 주소가 모두 이 값을 따릅니다. 서버를 옮기면 `APP_HOST`만 바꾸고 `up -d --build` 하면 됩니다.
+- 소셜 로그인은 각 개발자 콘솔에 콜백 주소를 등록해야 합니다: `https://{APP_HOST}/login/oauth2/code/{kakao|naver|google}` (네이버는 서비스 URL `https://{APP_HOST}`도). 네이버는 콜백 주소를 **경로까지 정확히** 비교합니다.
+- 1GB 메모리 서버에서는 백엔드 빌드 중 멈출 수 있어 스왑을 두거나 2GB 이상을 권장합니다.
 
 **관리자 계정 만들기**: 회원가입으로는 일반 회원(ROLE_USER)만 만들어집니다. 첫 관리자는 DB에 직접 넣습니다. 비밀번호는 Spring `BCryptPasswordEncoder`로 암호화한 값이어야 합니다. 아래 값은 위의 체험용 관리자 계정입니다.
 
 ```bash
-docker exec -i music-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 music_db' <<'SQL'
+sudo docker exec -i music-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 music_db' <<'SQL'
 INSERT INTO users (created_at, updated_at, provider, role, nickname, email, password)
 VALUES (NOW(6), NOW(6), 'local', 'ROLE_ADMIN', '관리자', 'admin@streamwave.kr',
         '$2a$10$XIti9yD38cMrga4rJ1Lr9.ZGuOdrQ004lgKQkNkKZE8uDn1e956W2');
@@ -509,14 +521,23 @@ SQL
 
 관리자가 하나 생기면 다음 관리자부터는 **프로필 패널 → 권한 관리** 탭에서 권한을 줄 수 있습니다(최고 관리자만 가능).
 
+**기존 DB 옮기기**: 다른 MySQL의 데이터를 그대로 쓰려면 `mysqldump`로 받은 파일을 서버로 복사한 뒤 백엔드를 잠시 멈추고 넣습니다.
+
+```bash
+sudo docker stop music-backend
+sudo docker exec -i music-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 music_db' < music_db.sql
+sudo docker exec music-redis redis-cli FLUSHALL   # 이전 데이터 기준 캐시 · 로그인 토큰 정리
+sudo docker start music-backend
+```
+
 | 변수 | 용도 |
 |---|---|
-| `APP_HOST` | 서비스 도메인 (Caddy 자동 HTTPS) |
+| `APP_HOST` | 서비스 도메인. HTTPS · CORS · 소셜 로그인 리다이렉트 · HLS · OBS 송출 주소가 모두 이 값을 따름 |
 | `MYSQL_ROOT_PASSWORD` | DB 비밀번호 |
 | `YOUTUBE_API_KEYS` | YouTube API 키 (콤마로 여러 개) |
 | `KAKAO_*`, `NAVER_*`, `GOOGLE_*` | OAuth 클라이언트 ID / 시크릿 |
 | `MAIL_USERNAME`, `MAIL_PASSWORD` | 인증번호 메일 발송 |
-| `AWS_*` | S3 업로드 / CloudFront |
+| `AWS_*` | S3 업로드 / CloudFront (`AWS_S3_BUCKET` 포함) |
 | `TOSS_CLIENT_KEY`, `TOSS_SECRET_KEY` | 토스페이먼츠 |
 
 ---
